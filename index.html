@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Testing a Hypothesis with a Confidence Interval</title>
+<style>
+  :root{
+    --ink:#1a1f36; --soft:#4a5370; --muted:#6b7490; --bg:#f4f6fb; --card:#fff; --line:#e3e8f3;
+    --teal:#0d9488; --teal-soft:#e6f6f4; --indigo:#4f46e5; --indigo-soft:#ecebfd;
+    --red:#c0392b; --red-soft:#fbecea; --amber:#c2680a; --amber-soft:#fdf2e3; --green:#1e7a3c; --green-soft:#eaf6ec;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
+    font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding:0 16px 70px}
+  p{margin:0 0 12px}
+  header{background:linear-gradient(135deg,#0d9488 0%,#4f46e5 60%,#7c3aed 100%);color:#fff;padding:34px 16px 30px;margin-bottom:24px}
+  header .inner{max-width:900px;margin:0 auto}
+  header h1{margin:0 0 6px;font-size:clamp(1.5rem,4vw,2.1rem);letter-spacing:-.3px}
+  header p{margin:0;opacity:.93;max-width:680px}
+  .kicker{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);padding:3px 11px;
+    border-radius:999px;font-size:.73rem;letter-spacing:1.3px;text-transform:uppercase;font-weight:700;margin-bottom:12px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:16px;
+    box-shadow:0 1px 2px rgba(26,31,54,.05)}
+  .card h2{margin:0 0 10px;font-size:1.2rem}
+  .card h3{margin:18px 0 8px;font-size:1rem;color:var(--soft)}
+  .step{position:relative;padding-left:66px}
+  .step::before{content:attr(data-n);position:absolute;left:20px;top:20px;width:34px;height:34px;border-radius:10px;
+    background:var(--indigo);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+  .hidden{display:none}
+  .fade{animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media(max-width:600px){.step{padding-left:20px;padding-top:62px}.step::before{top:18px}}
+
+  .box{border-radius:11px;padding:14px 17px;margin:10px 0}
+  .box.teal{background:var(--teal-soft);border:1px solid #bfe6e1}
+  .box.indigo{background:var(--indigo-soft);border:1px solid #d8d4fb}
+  .box.amber{background:var(--amber-soft);border:1px solid #f0d9ae}
+  .box.red{background:var(--red-soft);border:1px solid #f0c7c1}
+  .box.green{background:var(--green-soft);border:1px solid #bcdfc3}
+  .big{font-size:1.08rem;font-weight:600}
+  .math{font-family:"Cambria Math",Cambria,Georgia,serif;font-size:1.12rem}
+  .facts{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:12px 0}
+  .fact{background:#f8f9fe;border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:center}
+  .fact .l{font-size:.72rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .fact .v{font-size:1.25rem;font-weight:800;margin-top:2px}
+  .hyp{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+  @media(max-width:600px){.hyp{grid-template-columns:1fr}}
+  .hyp div{border-radius:11px;padding:14px 16px}
+  .hyp .h0{background:var(--teal-soft);border:2px solid var(--teal)}
+  .hyp .h1{background:var(--amber-soft);border:2px solid var(--amber)}
+  .hyp b{display:block;font-size:.78rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+  .hyp .h0 b{color:var(--teal)} .hyp .h1 b{color:var(--amber)}
+  .hyp .math{font-size:1.4rem;font-weight:700}
+
+  button.btn{font-family:inherit;font-size:.95rem;font-weight:700;padding:10px 18px;border-radius:9px;border:2px solid var(--indigo);
+    background:var(--indigo);color:#fff;cursor:pointer}
+  button.btn:hover{filter:brightness(1.08)}
+  button.btn.ghost{background:#fff;color:var(--indigo)}
+  button.btn.ghost:hover{background:var(--indigo-soft)}
+  button.btn.sm{padding:6px 12px;font-size:.86rem}
+  .next{margin-top:14px}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+  .chartbox{background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 8px 4px;margin:12px 0}
+  .cap{font-size:.76rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);padding:0 8px 4px}
+  svg{display:block;width:100%;height:auto}
+
+  .cands{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin:12px 0}
+  .cand{border:2px solid var(--line);border-radius:11px;padding:12px 14px;background:#fafbff}
+  .cand .x{font-family:Consolas,monospace;font-size:1.15rem;font-weight:700;margin-bottom:8px}
+  .cand .fb{margin-top:8px;font-size:.88rem;display:none}
+  .cand.done .fb{display:block}
+  .cand.ok{border-color:var(--green);background:var(--green-soft)}
+  .cand.no{border-color:var(--red);background:var(--red-soft)}
+
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+  .stat{background:#f8f9fe;border:1px solid var(--line);border-radius:10px;padding:8px 14px}
+  .stat b{font-size:1.15rem}
+
+  input[type=range]{width:100%;accent-color:var(--indigo)}
+  .verdict{font-weight:800;font-size:1.05rem}
+  .verdict.rej{color:var(--red)} .verdict.keep{color:var(--green)}
+  table.cmp{width:100%;border-collapse:collapse;font-size:.95rem;margin-top:8px}
+  table.cmp th,table.cmp td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  table.cmp th{background:#f8f9fe;font-size:.8rem;letter-spacing:.4px;text-transform:uppercase;color:var(--muted)}
+  code{background:#fff;border:1px solid #cfe5d3;border-radius:6px;padding:2px 7px;font-family:Consolas,monospace;font-size:.88rem;color:#9d1d1d}
+  ol.recipe{margin:6px 0 0;padding-left:22px}
+  ol.recipe li{margin-bottom:6px}
+  .progress{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0}
+  .bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+  .bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--indigo));transition:width .4s}
+</style>
+</head>
+<body>
+<header>
+  <div class="inner">
+    <span class="kicker">MGSC 3005 · Hypothesis Testing · Session 2</span>
+    <h1>Testing a Hypothesis with a Confidence Interval</h1>
+    <p>One question, one sample, step by step: what it means to use a sample to challenge H<sub>0</sub>, and how the decision is made.</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="progress"><div class="bar"><span id="pbar"></span></div></div>
+
+  <!-- STEP 1 -->
+  <div class="card step" data-n="1" id="s1">
+    <h2>The business question</h2>
+    <p>Hammermill cuts paper for laser printers. The target width is <b>216 mm</b>. Paper that is too wide <b>or</b> too narrow jams printers.
+      Quality Control wants to know: <b>is the machine still cutting at 216 mm on average, or has it drifted?</b></p>
+    <div class="facts">
+      <div class="fact"><div class="l">Target μ₀</div><div class="v">216 mm</div></div>
+      <div class="fact"><div class="l">Known σ</div><div class="v">0.023 mm</div></div>
+      <div class="fact"><div class="l">Sample size n</div><div class="v">50 sheets</div></div>
+      <div class="fact"><div class="l">Significance α</div><div class="v">.05</div></div>
+    </div>
+    <p style="font-size:.93rem;color:var(--soft)">σ is known from years of production data. We will use the sample in a moment — first we set up the test.</p>
+    <button class="btn next" data-next="s2">Next: write the hypotheses →</button>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card step hidden" data-n="2" id="s2">
+    <h2>Write H₀ and H₁</h2>
+    <div class="hyp">
+      <div class="h0"><b>Null hypothesis · status quo</b><span class="math">H₀: μ = 216</span>
+        <p style="margin:6px 0 0;font-size:.92rem">The machine is on target.</p></div>
+      <div class="h1"><b>Alternative · what we look for</b><span class="math">H₁: μ ≠ 216</span>
+        <p style="margin:6px 0 0;font-size:.92rem">The machine has drifted, in either direction. "≠" means a <b>two-tailed</b> test.</p></div>
+    </div>
+    <div class="box indigo big">μ is the true average width of <em>all</em> paper the machine cuts. We cannot measure all of it, so we never know μ for sure.
+      We will use a sample of 50 sheets to decide whether "μ = 216" is still believable.</div>
+    <button class="btn next" data-next="s3">Next: the key move →</button>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="card step hidden" data-n="3" id="s3">
+    <h2>The key move: assume H₀ is true</h2>
+    <div class="box teal big">A test starts by <u>assuming H₀ is correct</u>: the true mean really is μ = 216. Then we ask:
+      <em>"If that were true, what kind of sample means would we expect to see?"</em></div>
+    <p>From the Central Limit Theorem (Week 8), the sample mean x̄ of n = 50 sheets is a random variable with a normal distribution, centered at the true mean:</p>
+    <div class="box amber math" style="text-align:center">
+      If H₀ is true: &nbsp; x̄ ~ N( μ₀ = 216 , &nbsp; σ/√n = 0.023/√50 = <b>0.003253</b> )
+    </div>
+    <p>The curve below is the <b>world of H₀</b>: every place a sample mean could land, and how likely it is, <em>if the machine is truly on target</em>.</p>
+    <div class="chartbox"><div class="cap">Distribution of x̄ if H₀ is true</div><svg id="c3" viewBox="0 0 640 230"></svg></div>
+    <p style="font-size:.93rem;color:var(--soft)">The standard error 0.003253 tells you the typical distance between a sample mean and 216, just from random sampling.</p>
+    <button class="btn next" data-next="s4">Next: where would x̄ land? →</button>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="card step hidden" data-n="4" id="s4">
+    <h2>Think first: where is x̄ likely to land?</h2>
+    <p><b>If H₀ is true</b>, would a sample mean like each of these be <b>likely</b> or <b>unlikely</b>? Decide for each, then check.</p>
+    <div class="cands" id="cands"></div>
+    <div class="chartbox"><div class="cap">Your guesses on the H₀ curve</div><svg id="c4" viewBox="0 0 640 230"></svg></div>
+    <h3>Check with a simulation</h3>
+    <p>Pretend the machine is truly on target (H₀ true) and draw 100 samples of 50 sheets. Each dot is one sample mean.</p>
+    <div class="row">
+      <button class="btn" id="simBtn">Draw 100 samples if H₀ is true</button>
+      <button class="btn ghost sm" id="simClear">Clear</button>
+    </div>
+    <div class="stats" id="simStats"></div>
+    <div class="box teal" id="simMsg" style="display:none">Most sample means land within about 2 standard errors of 216. Values far out in the tails <b>can</b> happen when H₀ is true, but <b>rarely</b> — only about 5 in 100 land more than 0.0064 (1.96 standard errors) away from 216. Those are the red dots.</div>
+    <button class="btn next" data-next="s5">Next: draw the line →</button>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="card step hidden" data-n="5" id="s5">
+    <h2>Where is "too far" from 216?</h2>
+    <p>We need a rule <b>before</b> looking at our sample. With α = .05, we call the middle <b>95%</b> of the H₀ curve "believable" and the outer 5% (2.5% in each tail) "too surprising if H₀ were true".</p>
+    <div class="box amber math" style="text-align:center">
+      216 ± 1.96 × 0.003253 = 216 ± 0.006375 = [ 215.9936 , 216.0064 ]
+    </div>
+    <p style="font-size:.93rem;color:var(--soft)">1.96 is the same z you used for a 95% confidence interval in Week 8. In Excel: <code>=NORM.S.INV(0.975)</code>. The amount 0.006375 is the <b>margin of error</b>.</p>
+    <div class="chartbox"><div class="cap">The believable zone if H₀ is true (α = .05)</div><svg id="c5" viewBox="0 0 640 230"></svg></div>
+    <div class="box teal">If our x̄ lands <b>inside</b> the green zone → nothing surprising → no reason to doubt H₀.<br>
+      If our x̄ lands in a <b>red tail</b> → that would be rare if H₀ were true → evidence <b>against</b> H₀.</div>
+    <button class="btn next" data-next="s6">Next: now take the sample →</button>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="card step hidden" data-n="6" id="s6">
+    <h2>Take the sample</h2>
+    <p>Quality Control measures 50 randomly chosen sheets. The sample mean is:</p>
+    <div class="facts" style="max-width:260px"><div class="fact" style="border:2px solid var(--indigo)"><div class="l">Sample mean x̄</div><div class="v" style="color:var(--indigo)">216.007 mm</div></div></div>
+    <p><b>Before you click:</b> is 216.007 inside the believable zone [215.9936, 216.0064]?</p>
+    <div class="row">
+      <button class="btn ghost" data-ans6="in">Inside the zone</button>
+      <button class="btn ghost" data-ans6="out">Outside, in a tail</button>
+    </div>
+    <div id="a6" class="hidden fade">
+      <div class="chartbox"><div class="cap">Our sample mean on the H₀ curve</div><svg id="c6" viewBox="0 0 640 230"></svg></div>
+      <div class="box red"><b>216.007 is outside</b> the zone: it is past the upper edge 216.0064.
+        If the machine were truly cutting at 216, a sample mean this far away would happen less than 5% of the time.
+        So the sample is <b>hard to explain if H₀ is true</b>.</div>
+      <div class="box indigo big">This is what "challenging H₀ with a sample" means: we assumed H₀, saw where sample means <em>should</em> land, and our sample landed somewhere that would be surprising. The surprise is our evidence against H₀.</div>
+      <button class="btn next" data-next="s7">Next: the same check with a confidence interval →</button>
+    </div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="card step hidden" data-n="7" id="s7">
+    <h2>The same check, using the confidence interval</h2>
+    <p>In practice we build the 95% confidence interval <b>around x̄</b> (Week 8), and check whether <b>216 is inside it</b>:</p>
+    <div class="box amber math" style="text-align:center">
+      x̄ ± 1.96 × σ/√n = 216.007 ± 0.006375 = [ <b>216.0006</b> , <b>216.0134</b> ]
+    </div>
+    <div class="chartbox"><div class="cap">Two views, same margin of error</div><svg id="c7" viewBox="0 0 640 250"></svg></div>
+    <table class="cmp">
+      <tr><th>View</th><th>Question</th><th>Answer</th></tr>
+      <tr><td>Step 6 (green zone around 216)</td><td>Is x̄ within 0.006375 of 216?</td><td>No: 216.007 − 216 = 0.007 &gt; 0.006375</td></tr>
+      <tr><td>Confidence interval (around x̄)</td><td>Is 216 within 0.006375 of x̄?</td><td>No: 216 is outside [216.0006, 216.0134]</td></tr>
+    </table>
+    <div class="box teal" style="margin-top:12px">Both ask the same thing: <b>is the distance between x̄ and 216 more than the margin of error?</b>
+      That is why the CI rule works: <b>μ₀ outside the CI ⇔ x̄ in a red tail ⇔ reject H₀.</b></div>
+    <button class="btn next" data-next="s8">Next: decide and explain →</button>
+  </div>
+
+  <!-- STEP 8 -->
+  <div class="card step hidden" data-n="8" id="s8">
+    <h2>Make the decision and say what it means</h2>
+    <div class="box red"><span class="verdict rej">Decision: reject H₀ at α = .05.</span><br>
+      216 is outside the 95% CI [216.0006, 216.0134].</div>
+    <div class="box indigo"><b>Conclusion for the manager:</b> "The sample provides evidence that the average paper width is different from 216 mm.
+      The whole interval is above 216, so the machine is cutting slightly too wide. Quality Control should recalibrate the cutting tools."</div>
+    <p style="font-size:.93rem;color:var(--soft)">Note: rejecting H₀ does not mean we are 100% sure. There is still a 5% risk that the machine was fine and we were unlucky (a Type I error). That risk is α.</p>
+    <button class="btn next" data-next="s9">Next: try it yourself →</button>
+  </div>
+
+  <!-- STEP 9 -->
+  <div class="card step hidden" data-n="9" id="s9">
+    <h2>Your turn: what if the sample had been different?</h2>
+    <p>Move the slider to change the sample mean. Watch both views. They always give the same decision.</p>
+    <label for="xs" style="font-weight:700">Sample mean x̄ = <span id="xsv" style="color:var(--indigo)">216.0070</span> mm</label>
+    <input type="range" id="xs" min="215.988" max="216.012" step="0.0005" value="216.007">
+    <div class="chartbox"><div class="cap">H₀ zone (top) and the CI around x̄ (bottom)</div><svg id="c9" viewBox="0 0 640 250"></svg></div>
+    <div class="box" id="v9"></div>
+    <p style="font-size:.93rem;color:var(--soft)">Try x̄ = 216.004 and x̄ = 215.993. Find the two values where the decision flips (hint: 216 ± 0.006375).</p>
+  </div>
+
+  <!-- RECIPE -->
+  <div class="card hidden" id="s10">
+    <h2>The recipe (two-tailed test with a CI)</h2>
+    <ol class="recipe">
+      <li>Write H₀: μ = μ₀ and H₁: μ ≠ μ₀.</li>
+      <li>Assume H₀ is true. Then x̄ ~ N(μ₀, σ/√n).</li>
+      <li>Take the sample and compute x̄.</li>
+      <li>Build the CI: x̄ ± z × σ/√n, with z = 1.96 for α = .05 (<code>=NORM.S.INV(1-α/2)</code>).</li>
+      <li><b>μ₀ inside the CI → fail to reject H₀.</b> &nbsp; <b>μ₀ outside the CI → reject H₀.</b></li>
+      <li>Write the conclusion in business language.</li>
+    </ol>
+    <p style="margin:12px 0 0;font-size:.93rem;color:var(--soft)">"Fail to reject" is not "prove": if 216 were inside the CI, we would say the sample gives no strong evidence of drift, not that the machine is exactly on target.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var MU=216, SE=0.023/Math.sqrt(50), Z=1.959964, ME=Z*SE, XBAR=216.007;
+  var LO=MU-ME, HI=MU+ME;
+  var W=640, PL=20, PR=20, PT=16, AX=180, D=[215.987,216.017];
+  var C={teal:'#0d9488',ind:'#4f46e5',red:'#c0392b',green:'#1e7a3c',amber:'#c2680a',ink:'#1a1f36',mut:'#6b7490'};
+
+  function el(t,a,txt){ var e=document.createElementNS('http://www.w3.org/2000/svg',t); for(var k in a) e.setAttribute(k,a[k]); if(txt!==undefined) e.textContent=txt; return e; }
+  function sx(v){ return PL+(v-D[0])/(D[1]-D[0])*(W-PL-PR); }
+  function pdf(x){ return Math.exp(-0.5*Math.pow((x-MU)/SE,2)); }
+  function sy(f,ax){ return ax-f*(ax-PT-14); }
+  function txt(svg,x,y,s,o){ o=o||{}; svg.appendChild(el('text',{x:x,y:y,'text-anchor':o.a||'middle','font-size':o.fs||12,
+      fill:o.c||C.mut,'font-weight':o.b?700:400,'font-family':'Segoe UI,system-ui,sans-serif',stroke:'#fff','stroke-width':3,'paint-order':'stroke'},s)); }
+  function clear(s){ while(s.firstChild) s.removeChild(s.firstChild); }
+
+  function curve(svg,opt){
+    opt=opt||{}; var ax=opt.ax||AX, i, pts=[];
+    for(i=0;i<=240;i++){ var x=D[0]+(D[1]-D[0])*i/240; pts.push([sx(x),sy(pdf(x),ax)]); }
+    function area(a,b,fill,op){
+      var p=[], j; for(j=0;j<=80;j++){ var x=a+(b-a)*j/80; p.push(sx(x)+' '+sy(pdf(x),ax)); }
+      svg.appendChild(el('path',{d:'M '+sx(a)+' '+ax+' L '+p.join(' L ')+' L '+sx(b)+' '+ax+' Z',fill:fill,opacity:op}));
+    }
+    if(opt.zone){ area(D[0],LO,C.red,.55); area(HI,D[1],C.red,.55); area(LO,HI,C.green,.18); }
+    else area(D[0],D[1],C.teal,.14);
+    svg.appendChild(el('polyline',{points:pts.map(function(q){return q[0]+','+q[1];}).join(' '),fill:'none',stroke:C.teal,'stroke-width':2.5}));
+    svg.appendChild(el('line',{x1:PL,y1:ax,x2:W-PR,y2:ax,stroke:'#b9c2d8','stroke-width':1.5}));
+    var ticks=opt.ticks||[215.99,215.995,216,216.005,216.01,216.015];
+    ticks.forEach(function(t){ svg.appendChild(el('line',{x1:sx(t),y1:ax,x2:sx(t),y2:ax+5,stroke:'#b9c2d8'})); txt(svg,sx(t),ax+19,t.toFixed(3)); });
+    svg.appendChild(el('line',{x1:sx(MU),y1:PT,x2:sx(MU),y2:ax,stroke:C.teal,'stroke-width':1.5,'stroke-dasharray':'5 4'}));
+    txt(svg,sx(MU),PT+4,'μ₀ = 216',{c:C.teal,b:1});
+    if(opt.zone){
+      [LO,HI].forEach(function(v){ svg.appendChild(el('line',{x1:sx(v),y1:PT+20,x2:sx(v),y2:ax,stroke:C.red,'stroke-width':1.5})); });
+      txt(svg,sx(LO),ax+36,LO.toFixed(4),{c:C.red,b:1}); txt(svg,sx(HI),ax+36,HI.toFixed(4),{c:C.red,b:1});
+      txt(svg,sx(215.9905),ax-30,'2.5%',{c:C.red,b:1}); txt(svg,sx(216.0095),ax-30,'2.5%',{c:C.red,b:1});
+      txt(svg,sx(MU),ax-50,'middle 95%',{c:C.green,b:1});
+    }
+  }
+  function marker(svg,x,label,color,ax,y){
+    ax=ax||AX;
+    svg.appendChild(el('line',{x1:sx(x),y1:(y||PT+30),x2:sx(x),y2:ax,stroke:color,'stroke-width':3}));
+    svg.appendChild(el('circle',{cx:sx(x),cy:ax,r:6,fill:color,stroke:'#fff','stroke-width':2}));
+    if(label) txt(svg,sx(x),(y||PT+30)-6,label,{c:color,b:1,fs:13});
+  }
+  function bracket(svg,a,b,y,color,label){
+    svg.appendChild(el('line',{x1:sx(a),y1:y,x2:sx(b),y2:y,stroke:color,'stroke-width':5,'stroke-linecap':'butt'}));
+    [a,b].forEach(function(v){ svg.appendChild(el('line',{x1:sx(v),y1:y-9,x2:sx(v),y2:y+9,stroke:color,'stroke-width':2.5})); });
+    if(label) txt(svg,(sx(a)+sx(b))/2,y-12,label,{c:color,b:1});
+  }
+
+  /* progress + step reveal */
+  var ORDER=['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10'];
+  function prog(){ var n=ORDER.filter(function(id){return !document.getElementById(id).classList.contains('hidden');}).length;
+    document.getElementById('pbar').style.width=(n/ORDER.length*100)+'%'; }
+  document.querySelectorAll('[data-next]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var id=b.dataset.next, s=document.getElementById(id);
+      s.classList.remove('hidden'); s.classList.add('fade'); b.style.display='none';
+      if(id==='s9') { document.getElementById('s10').classList.remove('hidden'); draw9(); }
+      prog(); s.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+  prog();
+
+  /* step 3 */
+  (function(){ var s=document.getElementById('c3'); curve(s);
+    txt(s,sx(MU+2.2*SE),70,'sample means pile up near 216',{c:C.teal,a:'start'}); })();
+
+  /* step 4 candidates */
+  var CANDS=[215.999,216.010,216.002,215.990];
+  var guesses={};
+  function draw4(){
+    var s=document.getElementById('c4'); clear(s); curve(s);
+    CANDS.forEach(function(x){ if(guesses[x]===undefined) return;
+      var z=Math.abs(x-MU)/SE, ok=z<1.96; marker(s,x,x.toFixed(3),ok?C.green:C.red,AX,PT+40); });
+    sims.forEach(function(v,i){ s.appendChild(el('circle',{cx:sx(v),cy:AX-6-(i%9)*5,r:3.2,
+      fill:(v<LO||v>HI)?C.red:C.ind,opacity:.75})); });
+  }
+  var box=document.getElementById('cands');
+  CANDS.forEach(function(x){
+    var z=(x-MU)/SE, likely=Math.abs(z)<1.96;
+    var d=document.createElement('div'); d.className='cand';
+    d.innerHTML='<div class="x">x̄ = '+x.toFixed(3)+'</div><div class="row"><button class="btn ghost sm" data-g="1">Likely</button><button class="btn ghost sm" data-g="0">Unlikely</button></div>'+
+      '<div class="fb"></div>';
+    d.querySelectorAll('button').forEach(function(bt){
+      bt.addEventListener('click',function(){
+        var right=(bt.dataset.g==='1')===likely;
+        d.classList.add('done', likely?'ok':'no');
+        d.querySelector('.fb').innerHTML='<b>'+(right?'Right. ':'Not quite. ')+'</b>'+
+          (likely?'It is only '+Math.abs(z).toFixed(2)+' standard errors from 216 — close to the center, where sample means usually land.'
+                 :'It is '+Math.abs(z).toFixed(2)+' standard errors from 216 — far out in the tail. If H₀ were true, this would be very rare.');
+        d.querySelectorAll('button').forEach(function(q){q.disabled=true;});
+        guesses[x]=true; draw4();
+      });
+    });
+    box.appendChild(d);
+  });
+  var sims=[];
+  function randn(){ var u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+  document.getElementById('simBtn').addEventListener('click',function(){
+    for(var i=0;i<100;i++) sims.push(MU+SE*randn());
+    var out=sims.filter(function(v){return v<LO||v>HI;}).length;
+    document.getElementById('simStats').innerHTML='<div class="stat">Samples drawn: <b>'+sims.length+'</b></div>'+
+      '<div class="stat">Within ±0.0064 of 216: <b>'+(sims.length-out)+'</b></div>'+
+      '<div class="stat">Far out in a tail: <b style="color:#c0392b">'+out+'</b> ('+(out/sims.length*100).toFixed(1)+'%)</div>';
+    document.getElementById('simMsg').style.display='block';
+    draw4();
+  });
+  document.getElementById('simClear').addEventListener('click',function(){ sims=[]; document.getElementById('simStats').innerHTML='';
+    document.getElementById('simMsg').style.display='none'; draw4(); });
+  draw4();
+
+  /* step 5 */
+  (function(){ var s=document.getElementById('c5'); curve(s,{zone:true,ax:172}); })();
+
+  /* step 6 */
+  document.querySelectorAll('[data-ans6]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var right=b.dataset.ans6==='out';
+      b.style.borderColor=right?C.green:C.red; b.style.color=right?C.green:C.red;
+      b.textContent=(right?'✓ ':'✗ ')+b.textContent.replace(/^[✓✗] /,'');
+      var a=document.getElementById('a6'); a.classList.remove('hidden');
+      var s=document.getElementById('c6'); clear(s); curve(s,{zone:true,ax:172});
+      marker(s,XBAR,'our x̄ = 216.007',C.ind,172,PT+46);
+      prog();
+    });
+  });
+
+  /* step 7 + 9: two views */
+  function twoViews(svg,x){
+    clear(svg);
+    var ax=150, out=Math.abs(x-MU)>ME;
+    curve(svg,{zone:true,ax:ax,ticks:[215.99,216,216.01]});
+    svg.querySelectorAll('text').forEach(function(t){ if(/%|middle/.test(t.textContent)) t.remove(); });
+    marker(svg,x,'x̄ = '+x.toFixed(4),C.ind,ax,PT+46);
+    txt(svg,PL+2,ax-60,'H₀ zone: 216 ± ME',{a:'start',c:C.green,b:1});
+    var y=212, a=x-ME, b=x+ME, inside=(MU>=a&&MU<=b);
+    bracket(svg,a,b,y,C.ind,'95% CI: x̄ ± ME = ['+a.toFixed(4)+', '+b.toFixed(4)+']');
+    svg.appendChild(el('line',{x1:sx(MU),y1:ax+24,x2:sx(MU),y2:y+16,stroke:inside?C.green:C.red,'stroke-width':2,'stroke-dasharray':'4 3'}));
+    txt(svg,sx(MU),y+30,inside?'216 inside the CI':'216 outside the CI',{c:inside?C.green:C.red,b:1});
+    return out;
+  }
+  (function(){ twoViews(document.getElementById('c7'),XBAR); })();
+
+  function draw9(){
+    var x=parseFloat(document.getElementById('xs').value);
+    document.getElementById('xsv').textContent=x.toFixed(4);
+    var out=twoViews(document.getElementById('c9'),x);
+    var v=document.getElementById('v9');
+    v.className='box '+(out?'red':'green');
+    v.innerHTML=out
+      ? '<span class="verdict rej">Reject H₀.</span> x̄ is in a red tail of the H₀ curve, and 216 is outside the CI ['+(x-ME).toFixed(4)+', '+(x+ME).toFixed(4)+']. The machine appears to have drifted.'
+      : '<span class="verdict keep">Fail to reject H₀.</span> x̄ is inside the green zone, and 216 is inside the CI ['+(x-ME).toFixed(4)+', '+(x+ME).toFixed(4)+']. No strong evidence of drift.';
+  }
+  document.getElementById('xs').addEventListener('input',draw9);
+})();
+</script>
+</body>
+</html>
