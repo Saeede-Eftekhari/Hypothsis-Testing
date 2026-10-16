@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Testing a Hypothesis with a Confidence Interval</title>
+<title>Testing a Hypothesis, Step by Step</title>
 <style>
   :root{
     --ink:#1a1f36; --soft:#4a5370; --muted:#6b7490; --bg:#f4f6fb; --card:#fff; --line:#e3e8f3;
@@ -92,14 +92,23 @@
   .progress{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0}
   .bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
   .bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--indigo));transition:width .4s}
+  .methods{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-top:12px}
+  .mbtn{font-family:inherit;text-align:left;border:2px solid var(--line);background:#fff;border-radius:12px;padding:14px 16px;cursor:pointer;color:var(--ink)}
+  .mbtn b{display:block;font-size:1.02rem;margin-bottom:3px}
+  .mbtn span{font-size:.86rem;color:var(--soft)}
+  .mbtn:hover{border-color:var(--indigo);background:var(--indigo-soft)}
+  .mbtn.on{border-color:var(--indigo);background:var(--indigo);color:#fff}
+  .mbtn.on span{color:#e4e2ff}
+  .mtag{display:inline-block;font-size:.7rem;letter-spacing:1px;text-transform:uppercase;font-weight:800;color:var(--indigo);
+    background:var(--indigo-soft);border-radius:999px;padding:2px 10px;margin-bottom:6px}
 </style>
 </head>
 <body>
 <header>
   <div class="inner">
-    <span class="kicker">MGSC 3005 · Hypothesis Testing · Session 2</span>
-    <h1>Testing a Hypothesis with a Confidence Interval</h1>
-    <p>One question, one sample, step by step: what it means to use a sample to challenge H<sub>0</sub>, and how the decision is made.</p>
+    <span class="kicker">MGSC 3005 · Hypothesis Testing · Sessions 2–4</span>
+    <h1>Testing a Hypothesis, Step by Step</h1>
+    <p>One question, one sample: what it means to use a sample to challenge H<sub>0</sub>, then three ways to make the decision: confidence interval, critical value, and p-value.</p>
   </div>
 </header>
 
@@ -164,11 +173,26 @@
     </div>
     <div class="stats" id="simStats"></div>
     <div class="box teal" id="simMsg" style="display:none">Most sample means land within about 2 standard errors of 216. Values far out in the tails <b>can</b> happen when H₀ is true, but <b>rarely</b> — only about 5 in 100 land more than 0.0064 (1.96 standard errors) away from 216. Those are the red dots.</div>
-    <button class="btn next" data-next="s5">Next: draw the line →</button>
+    <button class="btn next" data-next="choose">Next: choose a method →</button>
   </div>
 
+  <!-- ============ CHOOSE A METHOD ============ -->
+  <div class="card hidden" id="choose">
+    <h2>Choose a method to finish the test</h2>
+    <p>Steps 1–4 are the same for every method: we assumed H₀ is true and saw where sample means should land. Now there are three ways to make the decision.
+      <b>All three use the same α = .05</b>, so they always reach the same decision. Pick one, and come back to try the others.</p>
+    <div class="methods">
+      <button class="mbtn pick" data-method="ci"><b>Confidence interval</b><span>Session 2 · Is 216 inside the 95% CI?</span></button>
+      <button class="mbtn pick" data-method="cv"><b>Critical value</b><span>Session 3 · Is z<sub>calc</sub> beyond ±1.96?</span></button>
+      <button class="mbtn pick" data-method="pv"><b>p-value</b><span>Session 4 · Is the p-value below α = .05?</span></button>
+    </div>
+  </div>
+
+  <!-- ============ CONFIDENCE INTERVAL METHOD ============ -->
+  <div class="method hidden" id="m-ci">
   <!-- STEP 5 -->
   <div class="card step hidden" data-n="5" id="s5">
+    <span class="mtag">Confidence interval method</span>
     <h2>Where is "too far" from 216?</h2>
     <p>We need a rule <b>before</b> looking at our sample. With α = .05, we call the middle <b>95%</b> of the H₀ curve "believable" and the outer 5% (2.5% in each tail) "too surprising if H₀ were true".</p>
     <div class="box amber math" style="text-align:center">
@@ -183,6 +207,7 @@
 
   <!-- STEP 6 -->
   <div class="card step hidden" data-n="6" id="s6">
+    <span class="mtag">Confidence interval method</span>
     <h2>Take the sample</h2>
     <p>Quality Control measures 50 randomly chosen sheets. The sample mean is:</p>
     <div class="facts" style="max-width:260px"><div class="fact" style="border:2px solid var(--indigo)"><div class="l">Sample mean x̄</div><div class="v" style="color:var(--indigo)">216.007 mm</div></div></div>
@@ -203,6 +228,7 @@
 
   <!-- STEP 7 -->
   <div class="card step hidden" data-n="7" id="s7">
+    <span class="mtag">Confidence interval method</span>
     <h2>The same check, using the confidence interval</h2>
     <p>In practice we build the 95% confidence interval <b>around x̄</b> (Week 8), and check whether <b>216 is inside it</b>:</p>
     <div class="box amber math" style="text-align:center">
@@ -221,6 +247,7 @@
 
   <!-- STEP 8 -->
   <div class="card step hidden" data-n="8" id="s8">
+    <span class="mtag">Confidence interval method</span>
     <h2>Make the decision and say what it means</h2>
     <div class="box red"><span class="verdict rej">Decision: reject H₀ at α = .05.</span><br>
       216 is outside the 95% CI [216.0006, 216.0134].</div>
@@ -232,6 +259,7 @@
 
   <!-- STEP 9 -->
   <div class="card step hidden" data-n="9" id="s9">
+    <span class="mtag">Confidence interval method</span>
     <h2>Your turn: what if the sample had been different?</h2>
     <p>Move the slider to change the sample mean. Watch both views. They always give the same decision.</p>
     <label for="xs" style="font-weight:700">Sample mean x̄ = <span id="xsv" style="color:var(--indigo)">216.0070</span> mm</label>
@@ -253,7 +281,165 @@
       <li>Write the conclusion in business language.</li>
     </ol>
     <p style="margin:12px 0 0;font-size:.93rem;color:var(--soft)">"Fail to reject" is not "prove": if 216 were inside the CI, we would say the sample gives no strong evidence of drift, not that the machine is exactly on target.</p>
+    <div class="box indigo" style="margin-top:14px">
+      <b>Same data, same α = .05, same decision.</b> Try another method:
+      <div class="row" style="margin-top:8px"><button class="btn ghost sm pick" data-method="cv">Critical value</button><button class="btn ghost sm pick" data-method="pv">p-value</button></div>
+    </div>
   </div>
+  </div>
+
+  <!-- ============ CRITICAL VALUE METHOD ============ -->
+  <div class="method hidden" id="m-cv">
+  <div class="card step hidden" data-n="5" id="mc5">
+    <span class="mtag">Critical value method</span>
+    <h2>Switch to the z scale</h2>
+    <p>Instead of working in millimeters, measure <b>how many standard errors</b> x̄ is from 216:</p>
+    <div class="box amber math" style="text-align:center">z = (x̄ − μ₀) / (σ/√n) = (x̄ − 216) / 0.003253</div>
+    <p>If H₀ is true, z follows the <b>standard normal</b> distribution N(0, 1): centered at 0, with standard deviation 1. It is the <b>same curve as Step 3</b>; only the axis changed.
+      The gray labels under the axis show the matching x̄ in millimeters.</p>
+    <div class="chartbox"><div class="cap">Distribution of z if H₀ is true</div><svg id="zc5" viewBox="0 0 640 230"></svg></div>
+    <button class="btn next" data-next="mc6">Next: draw the rejection regions →</button>
+  </div>
+
+  <div class="card step hidden" data-n="6" id="mc6">
+    <span class="mtag">Critical value method</span>
+    <h2>Draw the rejection regions (α = .05)</h2>
+    <p><b>Before</b> looking at the sample, mark where z would be too surprising if H₀ were true. The test is two-tailed, so α = .05 is split: <b>2.5% in each tail</b>.</p>
+    <div class="box amber math" style="text-align:center">Critical values = ± z<sub>α/2</sub> = ± 1.96 &nbsp;&nbsp; <span style="font-family:Consolas,monospace;font-size:.9rem">Excel: =NORM.S.INV(1-0.05/2)</span></div>
+    <div class="chartbox"><div class="cap">Rejection regions for α = .05</div><svg id="zc6" viewBox="0 0 640 230"></svg></div>
+    <div class="box teal"><b>Rule:</b> reject H₀ if z<sub>calc</sub> &lt; −1.96 or z<sub>calc</sub> &gt; +1.96. Otherwise, fail to reject H₀.<br>
+      <span style="font-size:.93rem">This is the same 1.96 used for the 95% confidence interval.</span></div>
+    <button class="btn next" data-next="mc7">Next: take the sample →</button>
+  </div>
+
+  <div class="card step hidden" data-n="7" id="mc7">
+    <span class="mtag">Critical value method</span>
+    <h2>Take the sample and compute z<sub>calc</sub></h2>
+    <p>Quality Control measures 50 sheets: <b>x̄ = 216.007 mm</b>. Standardize it:</p>
+    <div class="box amber math" style="text-align:center">z<sub>calc</sub> = (216.007 − 216) / 0.003253 = <b>2.152</b></div>
+    <p>Our sample mean is 2.152 standard errors above 216. <b>Before you click:</b> where does 2.152 fall?</p>
+    <div class="row">
+      <button class="btn ghost" data-cv7="in">Between −1.96 and +1.96</button>
+      <button class="btn ghost" data-cv7="out">In a rejection region</button>
+    </div>
+    <div id="cv7a" class="hidden fade">
+      <div class="chartbox"><div class="cap">Our z<sub>calc</sub> on the H₀ curve</div><svg id="zc7" viewBox="0 0 640 230"></svg></div>
+      <div class="box red"><b>2.152 &gt; 1.96</b>, so z<sub>calc</sub> lands in the right rejection region. If the machine were truly cutting at 216, a sample mean this many standard errors away would be rare.</div>
+      <button class="btn next" data-next="mc8">Next: decide and explain →</button>
+    </div>
+  </div>
+
+  <div class="card step hidden" data-n="8" id="mc8">
+    <span class="mtag">Critical value method</span>
+    <h2>Make the decision and say what it means</h2>
+    <div class="box red"><span class="verdict rej">Decision: reject H₀ at α = .05.</span><br>z<sub>calc</sub> = 2.152 is beyond the critical value +1.96.</div>
+    <div class="box indigo"><b>Conclusion for the manager:</b> "The sample provides evidence that the average paper width is different from 216 mm.
+      z<sub>calc</sub> is positive, so the machine is cutting slightly too wide. Quality Control should recalibrate the cutting tools."</div>
+    <p style="font-size:.93rem;color:var(--soft)">Same decision as the confidence interval method: 216 was outside [216.0006, 216.0134].</p>
+    <button class="btn next" data-next="mc9">Next: try it yourself →</button>
+  </div>
+
+  <div class="card step hidden" data-n="9" id="mc9">
+    <span class="mtag">Critical value method</span>
+    <h2>Your turn: what if the sample had been different?</h2>
+    <p>Move the slider to change the sample mean and watch z<sub>calc</sub> move against the cutoffs ±1.96 (α = .05).</p>
+    <label for="cvs" style="font-weight:700">Sample mean x̄ = <span id="cvsv" style="color:var(--indigo)">216.0070</span> mm &nbsp;→&nbsp; z<sub>calc</sub> = <span id="cvz" style="color:var(--indigo)">2.152</span></label>
+    <input type="range" id="cvs" min="215.988" max="216.012" step="0.0005" value="216.007">
+    <div class="chartbox"><div class="cap">z<sub>calc</sub> and the rejection regions</div><svg id="zc9" viewBox="0 0 640 230"></svg></div>
+    <div class="box" id="cv9"></div>
+    <p style="font-size:.93rem;color:var(--soft)">z<sub>calc</sub> crosses ±1.96 exactly when x̄ crosses 216 ± 0.006375: the same edges as the confidence interval method.</p>
+  </div>
+
+  <div class="card hidden" id="mc10">
+    <h2>The recipe (two-tailed test with critical values)</h2>
+    <ol class="recipe">
+      <li>Write H₀: μ = μ₀ and H₁: μ ≠ μ₀.</li>
+      <li>Assume H₀ is true. Then z = (x̄ − μ₀)/(σ/√n) follows N(0, 1).</li>
+      <li>Find the critical values ± z<sub>α/2</sub> (<code>=NORM.S.INV(1-α/2)</code>; 1.96 for α = .05).</li>
+      <li>Take the sample and compute z<sub>calc</sub>.</li>
+      <li><b>|z<sub>calc</sub>| &gt; z<sub>α/2</sub> → reject H₀.</b> &nbsp; <b>Otherwise → fail to reject H₀.</b></li>
+      <li>Write the conclusion in business language.</li>
+    </ol>
+    <div class="box indigo" style="margin-top:14px">
+      <b>Same data, same α = .05, same decision.</b> Try another method:
+      <div class="row" style="margin-top:8px"><button class="btn ghost sm pick" data-method="ci">Confidence interval</button><button class="btn ghost sm pick" data-method="pv">p-value</button></div>
+    </div>
+
+  </div>
+  </div>
+
+  <!-- ============ P-VALUE METHOD ============ -->
+  <div class="method hidden" id="m-pv">
+  <div class="card step hidden" data-n="5" id="mp5">
+    <span class="mtag">p-value method</span>
+    <h2>How surprising is our sample?</h2>
+    <p>Quality Control measures 50 sheets: <b>x̄ = 216.007 mm</b>. As a z-score:</p>
+    <div class="box amber math" style="text-align:center">z<sub>calc</sub> = (216.007 − 216) / 0.003253 = <b>2.152</b></div>
+    <div class="box teal big">The p-value answers one question: <em>If H₀ is true, what is the probability of getting a sample mean at least this far from 216, in either direction?</em></div>
+    <p><b>Before you compute:</b> do you expect that probability to be large or small?</p>
+    <div class="row">
+      <button class="btn ghost" data-pv5="large">Large</button>
+      <button class="btn ghost" data-pv5="small">Small</button>
+    </div>
+    <div id="pv5a" class="hidden fade">
+      <div class="box green">Small. In Step 4, sample means more than about 2 standard errors from 216 were rare when H₀ was true, and ours is 2.152 standard errors away.</div>
+      <button class="btn next" data-next="mp6">Next: compute the p-value →</button>
+    </div>
+  </div>
+
+  <div class="card step hidden" data-n="6" id="mp6">
+    <span class="mtag">p-value method</span>
+    <h2>The p-value is the area beyond ±2.152</h2>
+    <p>H₁ is μ ≠ 216, so being too far <b>above</b> or too far <b>below</b> both count as extreme. We add the area in <b>both tails</b>.</p>
+    <div class="chartbox"><div class="cap">Area at least as extreme as our sample, if H₀ is true</div><svg id="zp6" viewBox="0 0 640 230"></svg></div>
+    <div class="box amber math" style="text-align:center">
+      one tail = 1 − NORM.S.DIST(2.152, TRUE) = .0157 &nbsp;&nbsp;→&nbsp;&nbsp; p-value = 2 × .0157 = <b>.0314</b>
+    </div>
+    <p style="font-size:.93rem;color:var(--soft)">In one Excel step: <code>=2*(1-NORM.S.DIST(ABS(z),TRUE))</code>. NORM.S.DIST gives the area to the <b>left</b> of z, so 1 minus it is the right tail.</p>
+    <button class="btn next" data-next="mp7">Next: compare with α →</button>
+  </div>
+
+  <div class="card step hidden" data-n="7" id="mp7">
+    <span class="mtag">p-value method</span>
+    <h2>Compare the p-value with α = .05 and decide</h2>
+    <div class="box teal"><b>Rule:</b> reject H₀ if p-value &lt; α. Otherwise, fail to reject H₀.<br>
+      <span style="font-size:.93rem">α = .05 is the bar we set before seeing the data; the p-value is what the data delivered.</span></div>
+    <div class="chartbox"><div class="cap">p-value vs. α on the probability scale</div><svg id="zp7" viewBox="0 0 640 110"></svg></div>
+    <div class="box red"><span class="verdict rej">Decision: reject H₀ at α = .05.</span><br>p-value = .0314 &lt; .05. If the machine were on target, a sample this extreme would happen only about 3 times in 100.</div>
+    <div class="box indigo"><b>Conclusion for the manager:</b> "The sample provides evidence that the average paper width is different from 216 mm. The machine is cutting slightly too wide; Quality Control should recalibrate the cutting tools."</div>
+    <p style="font-size:.93rem;color:var(--soft)">Same decision as the other two methods. The p-value adds one thing: <b>how strong</b> the evidence is (smaller p = stronger).</p>
+    <button class="btn next" data-next="mp8">Next: try it yourself →</button>
+  </div>
+
+  <div class="card step hidden" data-n="8" id="mp8">
+    <span class="mtag">p-value method</span>
+    <h2>Your turn: what if the sample had been different?</h2>
+    <p>Move the slider and watch the shaded area (the p-value) grow or shrink. The dashed lines mark ±1.96, the α = .05 cutoffs.</p>
+    <label for="pvs" style="font-weight:700">Sample mean x̄ = <span id="pvsv" style="color:var(--indigo)">216.0070</span> mm &nbsp;→&nbsp; z<sub>calc</sub> = <span id="pvz" style="color:var(--indigo)">2.152</span> &nbsp;→&nbsp; p-value = <span id="pvp" style="color:var(--indigo)">.0314</span></label>
+    <input type="range" id="pvs" min="215.988" max="216.012" step="0.0005" value="216.007">
+    <div class="chartbox"><div class="cap">The p-value is the shaded area</div><svg id="zp8" viewBox="0 0 640 230"></svg></div>
+    <div class="box" id="pv8"></div>
+    <p style="font-size:.93rem;color:var(--soft)">The p-value drops below .05 exactly when z<sub>calc</sub> passes ±1.96: the same edges as the other two methods.</p>
+  </div>
+
+  <div class="card hidden" id="mp9">
+    <h2>The recipe (two-tailed test with the p-value)</h2>
+    <ol class="recipe">
+      <li>Write H₀: μ = μ₀ and H₁: μ ≠ μ₀.</li>
+      <li>Assume H₀ is true. Then z = (x̄ − μ₀)/(σ/√n) follows N(0, 1).</li>
+      <li>Take the sample and compute z<sub>calc</sub>.</li>
+      <li>Two-tailed p-value: <code>=2*(1-NORM.S.DIST(ABS(z),TRUE))</code>.</li>
+      <li><b>p-value &lt; α → reject H₀.</b> &nbsp; <b>p-value ≥ α → fail to reject H₀.</b></li>
+      <li>Write the conclusion in business language.</li>
+    </ol>
+    <div class="box indigo" style="margin-top:14px">
+      <b>Same data, same α = .05, same decision.</b> Try another method:
+      <div class="row" style="margin-top:8px"><button class="btn ghost sm pick" data-method="ci">Confidence interval</button><button class="btn ghost sm pick" data-method="cv">Critical value</button></div>
+    </div>
+
+  </div>
+  </div>
+
 </div>
 
 <script>
@@ -307,18 +493,132 @@
   }
 
   /* progress + step reveal */
-  var ORDER=['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10'];
-  function prog(){ var n=ORDER.filter(function(id){return !document.getElementById(id).classList.contains('hidden');}).length;
-    document.getElementById('pbar').style.width=(n/ORDER.length*100)+'%'; }
+  var SHARED=['s1','s2','s3','s4','choose'];
+  var MSTEPS={ci:['s5','s6','s7','s8','s9','s10'],cv:['mc5','mc6','mc7','mc8','mc9','mc10'],pv:['mp5','mp6','mp7','mp8','mp9']};
+  var active=null;
+  function prog(){
+    var ids=SHARED.concat(active?MSTEPS[active]:['x','x','x','x','x']);
+    var n=ids.filter(function(id){var e=document.getElementById(id); return e&&!e.classList.contains('hidden');}).length;
+    document.getElementById('pbar').style.width=(n/ids.length*100)+'%'; }
+  var LAST={s9:'s10',mc9:'mc10',mp8:'mp9'};
   document.querySelectorAll('[data-next]').forEach(function(b){
     b.addEventListener('click',function(){
       var id=b.dataset.next, s=document.getElementById(id);
       s.classList.remove('hidden'); s.classList.add('fade'); b.style.display='none';
-      if(id==='s9') { document.getElementById('s10').classList.remove('hidden'); draw9(); }
+      if(LAST[id]) document.getElementById(LAST[id]).classList.remove('hidden');
+      if(id==='s9') draw9(); if(id==='mc9') drawCV9(); if(id==='mp8') drawPV8();
       prog(); s.scrollIntoView({behavior:'smooth',block:'start'});
     });
   });
   prog();
+
+  /* ---------- method chooser ---------- */
+  var FIRST={ci:'s5',cv:'mc5',pv:'mp5'};
+  document.querySelectorAll('.pick').forEach(function(b){
+    b.addEventListener('click',function(){
+      var m=b.dataset.method; active=m;
+      document.querySelectorAll('.method').forEach(function(x){x.classList.add('hidden');});
+      var box=document.getElementById('m-'+m); box.classList.remove('hidden'); box.classList.add('fade');
+      document.getElementById(FIRST[m]).classList.remove('hidden');
+      document.querySelectorAll('.mbtn').forEach(function(x){x.classList.toggle('on',x.dataset.method===m);});
+      prog(); document.getElementById(FIRST[m]).scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+
+  /* ---------- z-scale charts (critical value + p-value) ---------- */
+  var ALPHA=0.05, ZC=1.959964, ZCALC=(XBAR-MU)/SE, ZD=[-4.2,4.2];
+  function erf(x){ var s=x<0?-1:1; x=Math.abs(x); var t=1/(1+0.3275911*x);
+    var y=1-((((1.061405429*t-1.453152027)*t+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x); return s*y; }
+  function Phi(z){ return 0.5*(1+erf(z/Math.SQRT2)); }
+  function pval(z){ return 2*(1-Phi(Math.abs(z))); }
+  function zx(z){ return PL+(z-ZD[0])/(ZD[1]-ZD[0])*(W-PL-PR); }
+  function phi(z){ return Math.exp(-0.5*z*z); }
+  function zcurve(svg,o){
+    o=o||{}; clear(svg); var ax=o.ax||170, i, pts=[];
+    function zy(f){ return ax-f*(ax-PT-14); }
+    function area(a,b,fill,op){ var p=[],j; for(j=0;j<=80;j++){ var z=a+(b-a)*j/80; p.push(zx(z)+' '+zy(phi(z))); }
+      svg.appendChild(el('path',{d:'M '+zx(a)+' '+ax+' L '+p.join(' L ')+' L '+zx(b)+' '+ax+' Z',fill:fill,opacity:op})); }
+    if(o.crit){ area(ZD[0],-ZC,C.red,.55); area(ZC,ZD[1],C.red,.55); area(-ZC,ZC,C.green,.18); }
+    else area(ZD[0],ZD[1],C.teal,.14);
+    if(o.p!==undefined){ var a=Math.min(Math.abs(o.p),4.15); area(ZD[0],-a,C.red,.6); area(a,ZD[1],C.red,.6); }
+    for(i=0;i<=240;i++){ var z=ZD[0]+(ZD[1]-ZD[0])*i/240; pts.push(zx(z)+','+zy(phi(z))); }
+    svg.appendChild(el('polyline',{points:pts.join(' '),fill:'none',stroke:C.teal,'stroke-width':2.5}));
+    svg.appendChild(el('line',{x1:PL,y1:ax,x2:W-PR,y2:ax,stroke:'#b9c2d8','stroke-width':1.5}));
+    [-3,-2,-1,0,1,2,3].forEach(function(t){ svg.appendChild(el('line',{x1:zx(t),y1:ax,x2:zx(t),y2:ax+5,stroke:'#b9c2d8'}));
+      txt(svg,zx(t),ax+19,String(t),{c:C.ink});
+      if(o.mm) txt(svg,zx(t),ax+35,(MU+t*SE).toFixed(4),{fs:10.5}); });
+    if(o.mm) txt(svg,W-PR,ax+35,'x̄ (mm)',{a:'end',fs:10.5});
+    svg.appendChild(el('line',{x1:zx(0),y1:PT,x2:zx(0),y2:ax,stroke:C.teal,'stroke-width':1.5,'stroke-dasharray':'5 4'}));
+    txt(svg,zx(0),PT+4,'z = 0  (x̄ = 216)',{c:C.teal,b:1});
+    if(o.crit){
+      [-ZC,ZC].forEach(function(v){ svg.appendChild(el('line',{x1:zx(v),y1:PT+20,x2:zx(v),y2:ax,stroke:C.red,'stroke-width':1.5})); });
+      txt(svg,zx(-ZC),ax+36,'−1.96',{c:C.red,b:1}); txt(svg,zx(ZC),ax+36,'+1.96',{c:C.red,b:1});
+      txt(svg,zx(-3),ax-30,'2.5%',{c:C.red,b:1}); txt(svg,zx(3),ax-30,'2.5%',{c:C.red,b:1});
+      if(!o.noMid) txt(svg,zx(0),ax-50,'middle 95%',{c:C.green,b:1});
+    }
+    if(o.dashCrit){ [-ZC,ZC].forEach(function(v){ svg.appendChild(el('line',{x1:zx(v),y1:PT+24,x2:zx(v),y2:ax,stroke:C.ink,'stroke-width':1.3,'stroke-dasharray':'4 3'})); });
+      txt(svg,zx(-ZC),ax+36,'−1.96',{c:C.ink}); txt(svg,zx(ZC),ax+36,'+1.96',{c:C.ink}); }
+    if(o.mark!==undefined){ var mz=Math.max(-4.1,Math.min(4.1,o.mark));
+      svg.appendChild(el('line',{x1:zx(mz),y1:PT+46,x2:zx(mz),y2:ax,stroke:C.ind,'stroke-width':3}));
+      svg.appendChild(el('circle',{cx:zx(mz),cy:ax,r:6,fill:C.ind,stroke:'#fff','stroke-width':2}));
+      txt(svg,zx(mz),PT+40,o.markLabel||('z = '+o.mark.toFixed(3)),{c:C.ind,b:1,fs:13}); }
+    if(o.pLabels){ var tl=(1-Phi(Math.abs(o.p))).toFixed(4).replace(/^0/,'');
+      txt(svg,zx(-3.3),ax-40,tl,{c:C.red,b:1,fs:13}); txt(svg,zx(3.3),ax-40,tl,{c:C.red,b:1,fs:13});
+      txt(svg,zx(-2.75),PT+46,'p-value = '+tl+' + '+tl+' = '+pval(o.p).toFixed(4).replace(/^0/,''),{c:C.ink,b:1,fs:13}); }
+  }
+  zcurve(document.getElementById('zc5'),{mm:true});
+  zcurve(document.getElementById('zc6'),{crit:true});
+  zcurve(document.getElementById('zp6'),{p:ZCALC,pLabels:true,mark:ZCALC,markLabel:'z_calc = 2.152'});
+  document.querySelectorAll('[data-cv7]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var right=b.dataset.cv7==='out';
+      b.style.borderColor=right?C.green:C.red; b.style.color=right?C.green:C.red;
+      b.textContent=(right?'✓ ':'✗ ')+b.textContent.replace(/^[✓✗] /,'');
+      document.getElementById('cv7a').classList.remove('hidden');
+      zcurve(document.getElementById('zc7'),{crit:true,noMid:false,mark:ZCALC,markLabel:'z_calc = 2.152'});
+    });
+  });
+  document.querySelectorAll('[data-pv5]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var right=b.dataset.pv5==='small';
+      b.style.borderColor=right?C.green:C.red; b.style.color=right?C.green:C.red;
+      b.textContent=(right?'✓ ':'✗ ')+b.textContent.replace(/^[✓✗] /,'');
+      document.getElementById('pv5a').classList.remove('hidden');
+    });
+  });
+  /* p-value vs alpha scale */
+  (function(){
+    var svg=document.getElementById('zp7'), L=40, R=600, y=55, mx=0.10;
+    function px(v){ return L+v/mx*(R-L); }
+    svg.appendChild(el('line',{x1:L,y1:y,x2:R,y2:y,stroke:'#b9c2d8','stroke-width':6,'stroke-linecap':'round'}));
+    svg.appendChild(el('line',{x1:L,y1:y,x2:px(ALPHA),y2:y,stroke:C.red,'stroke-width':6,opacity:.5}));
+    [0,0.02,0.04,0.06,0.08,0.10].forEach(function(t){ txt(svg,px(t),y+26,t===0?'0':t.toFixed(2).replace(/^0/,'')); });
+    svg.appendChild(el('line',{x1:px(ALPHA),y1:y-22,x2:px(ALPHA),y2:y+10,stroke:C.ink,'stroke-width':2,'stroke-dasharray':'4 3'}));
+    txt(svg,px(ALPHA),y-28,'α = .05',{c:C.ink,b:1});
+    var pv=pval(ZCALC);
+    svg.appendChild(el('circle',{cx:px(pv),cy:y,r:8,fill:C.ind,stroke:'#fff','stroke-width':2}));
+    txt(svg,px(pv),y-16,'p = .0314',{c:C.ind,b:1});
+    txt(svg,px(0.025),y+44,'p < α → reject H₀',{c:C.red,b:1}); txt(svg,px(0.078),y+44,'p ≥ α → fail to reject',{c:C.green,b:1});
+  })();
+  function drawCV9(){
+    var x=parseFloat(document.getElementById('cvs').value), z=(x-MU)/SE, out=Math.abs(z)>ZC;
+    document.getElementById('cvsv').textContent=x.toFixed(4); document.getElementById('cvz').textContent=z.toFixed(3);
+    zcurve(document.getElementById('zc9'),{crit:true,mark:z,markLabel:'z_calc = '+z.toFixed(3)});
+    var v=document.getElementById('cv9'); v.className='box '+(out?'red':'green');
+    v.innerHTML=out?'<span class="verdict rej">Reject H₀.</span> |z<sub>calc</sub>| = '+Math.abs(z).toFixed(3)+' is beyond 1.96: x̄ is in a rejection region.'
+                   :'<span class="verdict keep">Fail to reject H₀.</span> z<sub>calc</sub> = '+z.toFixed(3)+' is between −1.96 and +1.96. No strong evidence of drift.';
+  }
+  document.getElementById('cvs').addEventListener('input',drawCV9);
+  function drawPV8(){
+    var x=parseFloat(document.getElementById('pvs').value), z=(x-MU)/SE, p=pval(z), rej=p<ALPHA;
+    document.getElementById('pvsv').textContent=x.toFixed(4); document.getElementById('pvz').textContent=z.toFixed(3);
+    document.getElementById('pvp').textContent=p.toFixed(4).replace(/^0/,'');
+    zcurve(document.getElementById('zp8'),{p:z,dashCrit:true,mark:z,markLabel:'z_calc = '+z.toFixed(3)});
+    var v=document.getElementById('pv8'); v.className='box '+(rej?'red':'green');
+    v.innerHTML=rej?'<span class="verdict rej">Reject H₀.</span> p-value = '+p.toFixed(4).replace(/^0/,'')+' &lt; α = .05.'
+                   :'<span class="verdict keep">Fail to reject H₀.</span> p-value = '+p.toFixed(4).replace(/^0/,'')+' ≥ α = .05. No strong evidence of drift.';
+  }
+  document.getElementById('pvs').addEventListener('input',drawPV8);
 
   /* step 3 */
   (function(){ var s=document.getElementById('c3'); curve(s);
