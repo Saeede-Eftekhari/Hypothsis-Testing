@@ -124,7 +124,7 @@
       <div class="fact"><div class="l">Target μ₀</div><div class="v">216 mm</div></div>
       <div class="fact"><div class="l">Known σ</div><div class="v">0.023 mm</div></div>
       <div class="fact"><div class="l">Sample size n</div><div class="v">50 sheets</div></div>
-      <div class="fact"><div class="l">Significance α</div><div class="v">.05</div></div>
+      <div class="fact"><div class="l">Significance α</div><div class="v">.10</div></div>
     </div>
     <p style="font-size:.93rem;color:var(--soft)">σ is known from years of production data. We will use the sample in a moment — first we set up the test.</p>
     <button class="btn next" data-next="s2">Next: write the hypotheses →</button>
@@ -172,7 +172,7 @@
       <button class="btn ghost sm" id="simClear">Clear</button>
     </div>
     <div class="stats" id="simStats"></div>
-    <div class="box teal" id="simMsg" style="display:none">Most sample means land within about 2 standard errors of 216. Values far out in the tails <b>can</b> happen when H₀ is true, but <b>rarely</b> — only about 5 in 100 land more than 0.0064 (1.96 standard errors) away from 216. Those are the red dots.</div>
+    <div class="box teal" id="simMsg" style="display:none">Most sample means land within about 2 standard errors of 216. Values far out in the tails <b>can</b> happen when H₀ is true, but <b>rarely</b> — only about 10 in 100 land more than 0.0054 (1.645 standard errors) away from 216. Those are the red dots.</div>
     <button class="btn next" data-next="choose">Next: choose a method →</button>
   </div>
 
@@ -180,11 +180,11 @@
   <div class="card hidden" id="choose">
     <h2>Choose a method to finish the test</h2>
     <p>Steps 1–4 are the same for every method: we assumed H₀ is true and saw where sample means should land. Now there are three ways to make the decision.
-      <b>All three use the same α = .05</b>, so they always reach the same decision. Pick one, and come back to try the others.</p>
+      <b>All three use the same α = .10</b>, so they always reach the same decision. Pick one, and come back to try the others.</p>
     <div class="methods">
-      <button class="mbtn pick" data-method="ci"><b>Confidence interval</b><span>Session 2 · Is 216 inside the 95% CI?</span></button>
-      <button class="mbtn pick" data-method="cv"><b>Critical value</b><span>Session 3 · Is z<sub>calc</sub> beyond ±1.96?</span></button>
-      <button class="mbtn pick" data-method="pv"><b>p-value</b><span>Session 4 · Is the p-value below α = .05?</span></button>
+      <button class="mbtn pick" data-method="ci"><b>Confidence interval</b><span>Session 2 · Is 216 inside the 90% CI?</span></button>
+      <button class="mbtn pick" data-method="cv"><b>Critical value</b><span>Session 3 · Is z<sub>calc</sub> beyond ±1.645?</span></button>
+      <button class="mbtn pick" data-method="pv"><b>p-value</b><span>Session 4 · Is the p-value below α = .10?</span></button>
     </div>
   </div>
 
@@ -194,12 +194,12 @@
   <div class="card step hidden" data-n="5" id="s5">
     <span class="mtag">Confidence interval method</span>
     <h2>Where is "too far" from 216?</h2>
-    <p>We need a rule <b>before</b> looking at our sample. With α = .05, we call the middle <b>95%</b> of the H₀ curve "believable" and the outer 5% (2.5% in each tail) "too surprising if H₀ were true".</p>
+    <p>We need a rule <b>before</b> looking at our sample. With α = .10, we call the middle <b>90%</b> of the H₀ curve "believable" and the outer 10% (5% in each tail) "too surprising if H₀ were true".</p>
     <div class="box amber math" style="text-align:center">
-      216 ± 1.96 × 0.003253 = 216 ± 0.006375 = [ 215.9936 , 216.0064 ]
+      216 ± 1.645 × 0.003253 = 216 ± 0.005350 = [ 215.9946 , 216.0054 ]
     </div>
-    <p style="font-size:.93rem;color:var(--soft)">1.96 is the same z you used for a 95% confidence interval in Week 8. In Excel: <code>=NORM.S.INV(0.975)</code>. The amount 0.006375 is the <b>margin of error</b>.</p>
-    <div class="chartbox"><div class="cap">The believable zone if H₀ is true (α = .05)</div><svg id="c5" viewBox="0 0 640 230"></svg></div>
+    <p style="font-size:.93rem;color:var(--soft)">1.645 is the same z you used for a 90% confidence interval in Week 8. In Excel: <code>=NORM.S.INV(0.95)</code>. The amount 0.005350 is the <b>margin of error</b>.</p>
+    <div class="chartbox"><div class="cap">The believable zone if H₀ is true (α = .10)</div><svg id="c5" viewBox="0 0 640 230"></svg></div>
     <div class="box teal">If our x̄ lands <b>inside</b> the green zone → nothing surprising → no reason to doubt H₀.<br>
       If our x̄ lands in a <b>red tail</b> → that would be rare if H₀ were true → evidence <b>against</b> H₀.</div>
     <button class="btn next" data-next="s6">Next: now take the sample →</button>
@@ -211,15 +211,15 @@
     <h2>Take the sample</h2>
     <p>Quality Control measures 50 randomly chosen sheets. The sample mean is:</p>
     <div class="facts" style="max-width:260px"><div class="fact" style="border:2px solid var(--indigo)"><div class="l">Sample mean x̄</div><div class="v" style="color:var(--indigo)">216.007 mm</div></div></div>
-    <p><b>Before you click:</b> is 216.007 inside the believable zone [215.9936, 216.0064]?</p>
+    <p><b>Before you click:</b> is 216.007 inside the believable zone [215.9946, 216.0054]?</p>
     <div class="row">
       <button class="btn ghost" data-ans6="in">Inside the zone</button>
       <button class="btn ghost" data-ans6="out">Outside, in a tail</button>
     </div>
     <div id="a6" class="hidden fade">
       <div class="chartbox"><div class="cap">Our sample mean on the H₀ curve</div><svg id="c6" viewBox="0 0 640 230"></svg></div>
-      <div class="box red"><b>216.007 is outside</b> the zone: it is past the upper edge 216.0064.
-        If the machine were truly cutting at 216, a sample mean this far away would happen less than 5% of the time.
+      <div class="box red"><b>216.007 is outside</b> the zone: it is past the upper edge 216.0054.
+        If the machine were truly cutting at 216, a sample mean this far away would happen less than 10% of the time.
         So the sample is <b>hard to explain if H₀ is true</b>.</div>
       <div class="box indigo big">This is what "challenging H₀ with a sample" means: we assumed H₀, saw where sample means <em>should</em> land, and our sample landed somewhere that would be surprising. The surprise is our evidence against H₀.</div>
       <button class="btn next" data-next="s7">Next: the same check with a confidence interval →</button>
@@ -230,15 +230,15 @@
   <div class="card step hidden" data-n="7" id="s7">
     <span class="mtag">Confidence interval method</span>
     <h2>The same check, using the confidence interval</h2>
-    <p>In practice we build the 95% confidence interval <b>around x̄</b> (Week 8), and check whether <b>216 is inside it</b>:</p>
+    <p>In practice we build the 90% confidence interval <b>around x̄</b> (Week 8), and check whether <b>216 is inside it</b>:</p>
     <div class="box amber math" style="text-align:center">
-      x̄ ± 1.96 × σ/√n = 216.007 ± 0.006375 = [ <b>216.0006</b> , <b>216.0134</b> ]
+      x̄ ± 1.645 × σ/√n = 216.007 ± 0.005350 = [ <b>216.0016</b> , <b>216.0124</b> ]
     </div>
     <div class="chartbox"><div class="cap">Two views, same margin of error</div><svg id="c7" viewBox="0 0 640 250"></svg></div>
     <table class="cmp">
       <tr><th>View</th><th>Question</th><th>Answer</th></tr>
-      <tr><td>Step 6 (green zone around 216)</td><td>Is x̄ within 0.006375 of 216?</td><td>No: 216.007 − 216 = 0.007 &gt; 0.006375</td></tr>
-      <tr><td>Confidence interval (around x̄)</td><td>Is 216 within 0.006375 of x̄?</td><td>No: 216 is outside [216.0006, 216.0134]</td></tr>
+      <tr><td>Step 6 (green zone around 216)</td><td>Is x̄ within 0.005350 of 216?</td><td>No: 216.007 − 216 = 0.007 &gt; 0.005350</td></tr>
+      <tr><td>Confidence interval (around x̄)</td><td>Is 216 within 0.005350 of x̄?</td><td>No: 216 is outside [216.0016, 216.0124]</td></tr>
     </table>
     <div class="box teal" style="margin-top:12px">Both ask the same thing: <b>is the distance between x̄ and 216 more than the margin of error?</b>
       That is why the CI rule works: <b>μ₀ outside the CI ⇔ x̄ in a red tail ⇔ reject H₀.</b></div>
@@ -249,11 +249,11 @@
   <div class="card step hidden" data-n="8" id="s8">
     <span class="mtag">Confidence interval method</span>
     <h2>Make the decision and say what it means</h2>
-    <div class="box red"><span class="verdict rej">Decision: reject H₀ at α = .05.</span><br>
-      216 is outside the 95% CI [216.0006, 216.0134].</div>
+    <div class="box red"><span class="verdict rej">Decision: reject H₀ at α = .10.</span><br>
+      216 is outside the 90% CI [216.0016, 216.0124].</div>
     <div class="box indigo"><b>Conclusion for the manager:</b> "The sample provides evidence that the average paper width is different from 216 mm.
       The whole interval is above 216, so the machine is cutting slightly too wide. Quality Control should recalibrate the cutting tools."</div>
-    <p style="font-size:.93rem;color:var(--soft)">Note: rejecting H₀ does not mean we are 100% sure. There is still a 5% risk that the machine was fine and we were unlucky (a Type I error). That risk is α.</p>
+    <p style="font-size:.93rem;color:var(--soft)">Note: rejecting H₀ does not mean we are 100% sure. There is still a 10% risk that the machine was fine and we were unlucky (a Type I error). That risk is α.</p>
     <button class="btn next" data-next="s9">Next: try it yourself →</button>
   </div>
 
@@ -266,7 +266,7 @@
     <input type="range" id="xs" min="215.988" max="216.012" step="0.0005" value="216.007">
     <div class="chartbox"><div class="cap">H₀ zone (top) and the CI around x̄ (bottom)</div><svg id="c9" viewBox="0 0 640 250"></svg></div>
     <div class="box" id="v9"></div>
-    <p style="font-size:.93rem;color:var(--soft)">Try x̄ = 216.004 and x̄ = 215.993. Find the two values where the decision flips (hint: 216 ± 0.006375).</p>
+    <p style="font-size:.93rem;color:var(--soft)">Try x̄ = 216.004 and x̄ = 215.993. Find the two values where the decision flips (hint: 216 ± 0.005350).</p>
   </div>
 
   <!-- RECIPE -->
@@ -276,13 +276,13 @@
       <li>Write H₀: μ = μ₀ and H₁: μ ≠ μ₀.</li>
       <li>Assume H₀ is true. Then x̄ ~ N(μ₀, σ/√n).</li>
       <li>Take the sample and compute x̄.</li>
-      <li>Build the CI: x̄ ± z × σ/√n, with z = 1.96 for α = .05 (<code>=NORM.S.INV(1-α/2)</code>).</li>
+      <li>Build the CI: x̄ ± z × σ/√n, with z = 1.645 for α = .10 (<code>=NORM.S.INV(1-α/2)</code>).</li>
       <li><b>μ₀ inside the CI → fail to reject H₀.</b> &nbsp; <b>μ₀ outside the CI → reject H₀.</b></li>
       <li>Write the conclusion in business language.</li>
     </ol>
     <p style="margin:12px 0 0;font-size:.93rem;color:var(--soft)">"Fail to reject" is not "prove": if 216 were inside the CI, we would say the sample gives no strong evidence of drift, not that the machine is exactly on target.</p>
     <div class="box indigo" style="margin-top:14px">
-      <b>Same data, same α = .05, same decision.</b> Try another method:
+      <b>Same data, same α = .10, same decision.</b> Try another method:
       <div class="row" style="margin-top:8px"><button class="btn ghost sm pick" data-method="cv">Critical value</button><button class="btn ghost sm pick" data-method="pv">p-value</button></div>
     </div>
   </div>
@@ -303,12 +303,12 @@
 
   <div class="card step hidden" data-n="6" id="mc6">
     <span class="mtag">Critical value method</span>
-    <h2>Draw the rejection regions (α = .05)</h2>
-    <p><b>Before</b> looking at the sample, mark where z would be too surprising if H₀ were true. The test is two-tailed, so α = .05 is split: <b>2.5% in each tail</b>.</p>
-    <div class="box amber math" style="text-align:center">Critical values = ± z<sub>α/2</sub> = ± 1.96 &nbsp;&nbsp; <span style="font-family:Consolas,monospace;font-size:.9rem">Excel: =NORM.S.INV(1-0.05/2)</span></div>
-    <div class="chartbox"><div class="cap">Rejection regions for α = .05</div><svg id="zc6" viewBox="0 0 640 230"></svg></div>
-    <div class="box teal"><b>Rule:</b> reject H₀ if z<sub>calc</sub> &lt; −1.96 or z<sub>calc</sub> &gt; +1.96. Otherwise, fail to reject H₀.<br>
-      <span style="font-size:.93rem">This is the same 1.96 used for the 95% confidence interval.</span></div>
+    <h2>Draw the rejection regions (α = .10)</h2>
+    <p><b>Before</b> looking at the sample, mark where z would be too surprising if H₀ were true. The test is two-tailed, so α = .10 is split: <b>5% in each tail</b>.</p>
+    <div class="box amber math" style="text-align:center">Critical values = ± z<sub>α/2</sub> = ± 1.645 &nbsp;&nbsp; <span style="font-family:Consolas,monospace;font-size:.9rem">Excel: =NORM.S.INV(1-0.10/2)</span></div>
+    <div class="chartbox"><div class="cap">Rejection regions for α = .10</div><svg id="zc6" viewBox="0 0 640 230"></svg></div>
+    <div class="box teal"><b>Rule:</b> reject H₀ if z<sub>calc</sub> &lt; −1.645 or z<sub>calc</sub> &gt; +1.645. Otherwise, fail to reject H₀.<br>
+      <span style="font-size:.93rem">This is the same 1.645 used for the 90% confidence interval.</span></div>
     <button class="btn next" data-next="mc7">Next: take the sample →</button>
   </div>
 
@@ -319,12 +319,12 @@
     <div class="box amber math" style="text-align:center">z<sub>calc</sub> = (216.007 − 216) / 0.003253 = <b>2.152</b></div>
     <p>Our sample mean is 2.152 standard errors above 216. <b>Before you click:</b> where does 2.152 fall?</p>
     <div class="row">
-      <button class="btn ghost" data-cv7="in">Between −1.96 and +1.96</button>
+      <button class="btn ghost" data-cv7="in">Between −1.645 and +1.645</button>
       <button class="btn ghost" data-cv7="out">In a rejection region</button>
     </div>
     <div id="cv7a" class="hidden fade">
       <div class="chartbox"><div class="cap">Our z<sub>calc</sub> on the H₀ curve</div><svg id="zc7" viewBox="0 0 640 230"></svg></div>
-      <div class="box red"><b>2.152 &gt; 1.96</b>, so z<sub>calc</sub> lands in the right rejection region. If the machine were truly cutting at 216, a sample mean this many standard errors away would be rare.</div>
+      <div class="box red"><b>2.152 &gt; 1.645</b>, so z<sub>calc</sub> lands in the right rejection region. If the machine were truly cutting at 216, a sample mean this many standard errors away would be rare.</div>
       <button class="btn next" data-next="mc8">Next: decide and explain →</button>
     </div>
   </div>
@@ -332,22 +332,22 @@
   <div class="card step hidden" data-n="8" id="mc8">
     <span class="mtag">Critical value method</span>
     <h2>Make the decision and say what it means</h2>
-    <div class="box red"><span class="verdict rej">Decision: reject H₀ at α = .05.</span><br>z<sub>calc</sub> = 2.152 is beyond the critical value +1.96.</div>
+    <div class="box red"><span class="verdict rej">Decision: reject H₀ at α = .10.</span><br>z<sub>calc</sub> = 2.152 is beyond the critical value +1.645.</div>
     <div class="box indigo"><b>Conclusion for the manager:</b> "The sample provides evidence that the average paper width is different from 216 mm.
       z<sub>calc</sub> is positive, so the machine is cutting slightly too wide. Quality Control should recalibrate the cutting tools."</div>
-    <p style="font-size:.93rem;color:var(--soft)">Same decision as the confidence interval method: 216 was outside [216.0006, 216.0134].</p>
+    <p style="font-size:.93rem;color:var(--soft)">Same decision as the confidence interval method: 216 was outside [216.0016, 216.0124].</p>
     <button class="btn next" data-next="mc9">Next: try it yourself →</button>
   </div>
 
   <div class="card step hidden" data-n="9" id="mc9">
     <span class="mtag">Critical value method</span>
     <h2>Your turn: what if the sample had been different?</h2>
-    <p>Move the slider to change the sample mean and watch z<sub>calc</sub> move against the cutoffs ±1.96 (α = .05).</p>
+    <p>Move the slider to change the sample mean and watch z<sub>calc</sub> move against the cutoffs ±1.645 (α = .10).</p>
     <label for="cvs" style="font-weight:700">Sample mean x̄ = <span id="cvsv" style="color:var(--indigo)">216.0070</span> mm &nbsp;→&nbsp; z<sub>calc</sub> = <span id="cvz" style="color:var(--indigo)">2.152</span></label>
     <input type="range" id="cvs" min="215.988" max="216.012" step="0.0005" value="216.007">
     <div class="chartbox"><div class="cap">z<sub>calc</sub> and the rejection regions</div><svg id="zc9" viewBox="0 0 640 230"></svg></div>
     <div class="box" id="cv9"></div>
-    <p style="font-size:.93rem;color:var(--soft)">z<sub>calc</sub> crosses ±1.96 exactly when x̄ crosses 216 ± 0.006375: the same edges as the confidence interval method.</p>
+    <p style="font-size:.93rem;color:var(--soft)">z<sub>calc</sub> crosses ±1.645 exactly when x̄ crosses 216 ± 0.005350: the same edges as the confidence interval method.</p>
   </div>
 
   <div class="card hidden" id="mc10">
@@ -355,13 +355,13 @@
     <ol class="recipe">
       <li>Write H₀: μ = μ₀ and H₁: μ ≠ μ₀.</li>
       <li>Assume H₀ is true. Then z = (x̄ − μ₀)/(σ/√n) follows N(0, 1).</li>
-      <li>Find the critical values ± z<sub>α/2</sub> (<code>=NORM.S.INV(1-α/2)</code>; 1.96 for α = .05).</li>
+      <li>Find the critical values ± z<sub>α/2</sub> (<code>=NORM.S.INV(1-α/2)</code>; 1.645 for α = .10).</li>
       <li>Take the sample and compute z<sub>calc</sub>.</li>
       <li><b>|z<sub>calc</sub>| &gt; z<sub>α/2</sub> → reject H₀.</b> &nbsp; <b>Otherwise → fail to reject H₀.</b></li>
       <li>Write the conclusion in business language.</li>
     </ol>
     <div class="box indigo" style="margin-top:14px">
-      <b>Same data, same α = .05, same decision.</b> Try another method:
+      <b>Same data, same α = .10, same decision.</b> Try another method:
       <div class="row" style="margin-top:8px"><button class="btn ghost sm pick" data-method="ci">Confidence interval</button><button class="btn ghost sm pick" data-method="pv">p-value</button></div>
     </div>
 
@@ -401,11 +401,11 @@
 
   <div class="card step hidden" data-n="7" id="mp7">
     <span class="mtag">p-value method</span>
-    <h2>Compare the p-value with α = .05 and decide</h2>
+    <h2>Compare the p-value with α = .10 and decide</h2>
     <div class="box teal"><b>Rule:</b> reject H₀ if p-value &lt; α. Otherwise, fail to reject H₀.<br>
-      <span style="font-size:.93rem">α = .05 is the bar we set before seeing the data; the p-value is what the data delivered.</span></div>
+      <span style="font-size:.93rem">α = .10 is the bar we set before seeing the data; the p-value is what the data delivered.</span></div>
     <div class="chartbox"><div class="cap">p-value vs. α on the probability scale</div><svg id="zp7" viewBox="0 0 640 110"></svg></div>
-    <div class="box red"><span class="verdict rej">Decision: reject H₀ at α = .05.</span><br>p-value = .0314 &lt; .05. If the machine were on target, a sample this extreme would happen only about 3 times in 100.</div>
+    <div class="box red"><span class="verdict rej">Decision: reject H₀ at α = .10.</span><br>p-value = .0314 &lt; .10. If the machine were on target, a sample this extreme would happen only about 3 times in 100.</div>
     <div class="box indigo"><b>Conclusion for the manager:</b> "The sample provides evidence that the average paper width is different from 216 mm. The machine is cutting slightly too wide; Quality Control should recalibrate the cutting tools."</div>
     <p style="font-size:.93rem;color:var(--soft)">Same decision as the other two methods. The p-value adds one thing: <b>how strong</b> the evidence is (smaller p = stronger).</p>
     <button class="btn next" data-next="mp8">Next: try it yourself →</button>
@@ -414,12 +414,12 @@
   <div class="card step hidden" data-n="8" id="mp8">
     <span class="mtag">p-value method</span>
     <h2>Your turn: what if the sample had been different?</h2>
-    <p>Move the slider and watch the shaded area (the p-value) grow or shrink. The dashed lines mark ±1.96, the α = .05 cutoffs.</p>
+    <p>Move the slider and watch the shaded area (the p-value) grow or shrink. The dashed lines mark ±1.645, the α = .10 cutoffs.</p>
     <label for="pvs" style="font-weight:700">Sample mean x̄ = <span id="pvsv" style="color:var(--indigo)">216.0070</span> mm &nbsp;→&nbsp; z<sub>calc</sub> = <span id="pvz" style="color:var(--indigo)">2.152</span> &nbsp;→&nbsp; p-value = <span id="pvp" style="color:var(--indigo)">.0314</span></label>
     <input type="range" id="pvs" min="215.988" max="216.012" step="0.0005" value="216.007">
     <div class="chartbox"><div class="cap">The p-value is the shaded area</div><svg id="zp8" viewBox="0 0 640 230"></svg></div>
     <div class="box" id="pv8"></div>
-    <p style="font-size:.93rem;color:var(--soft)">The p-value drops below .05 exactly when z<sub>calc</sub> passes ±1.96: the same edges as the other two methods.</p>
+    <p style="font-size:.93rem;color:var(--soft)">The p-value drops below .10 exactly when z<sub>calc</sub> passes ±1.645: the same edges as the other two methods.</p>
   </div>
 
   <div class="card hidden" id="mp9">
@@ -433,7 +433,7 @@
       <li>Write the conclusion in business language.</li>
     </ol>
     <div class="box indigo" style="margin-top:14px">
-      <b>Same data, same α = .05, same decision.</b> Try another method:
+      <b>Same data, same α = .10, same decision.</b> Try another method:
       <div class="row" style="margin-top:8px"><button class="btn ghost sm pick" data-method="ci">Confidence interval</button><button class="btn ghost sm pick" data-method="cv">Critical value</button></div>
     </div>
 
@@ -445,7 +445,7 @@
 <script>
 (function(){
   "use strict";
-  var MU=216, SE=0.023/Math.sqrt(50), Z=1.959964, ME=Z*SE, XBAR=216.007;
+  var MU=216, SE=0.023/Math.sqrt(50), Z=1.644854, ME=Z*SE, XBAR=216.007;
   var LO=MU-ME, HI=MU+ME;
   var W=640, PL=20, PR=20, PT=16, AX=180, D=[215.987,216.017];
   var C={teal:'#0d9488',ind:'#4f46e5',red:'#c0392b',green:'#1e7a3c',amber:'#c2680a',ink:'#1a1f36',mut:'#6b7490'};
@@ -476,8 +476,8 @@
     if(opt.zone){
       [LO,HI].forEach(function(v){ svg.appendChild(el('line',{x1:sx(v),y1:PT+20,x2:sx(v),y2:ax,stroke:C.red,'stroke-width':1.5})); });
       txt(svg,sx(LO),ax+36,LO.toFixed(4),{c:C.red,b:1}); txt(svg,sx(HI),ax+36,HI.toFixed(4),{c:C.red,b:1});
-      txt(svg,sx(215.9905),ax-30,'2.5%',{c:C.red,b:1}); txt(svg,sx(216.0095),ax-30,'2.5%',{c:C.red,b:1});
-      txt(svg,sx(MU),ax-50,'middle 95%',{c:C.green,b:1});
+      txt(svg,sx(215.9905),ax-30,'5%',{c:C.red,b:1}); txt(svg,sx(216.0095),ax-30,'5%',{c:C.red,b:1});
+      txt(svg,sx(MU),ax-50,'middle 90%',{c:C.green,b:1});
     }
   }
   function marker(svg,x,label,color,ax,y){
@@ -526,7 +526,7 @@
   });
 
   /* ---------- z-scale charts (critical value + p-value) ---------- */
-  var ALPHA=0.05, ZC=1.959964, ZCALC=(XBAR-MU)/SE, ZD=[-4.2,4.2];
+  var ALPHA=0.10, ZC=1.644854, ZCALC=(XBAR-MU)/SE, ZD=[-4.2,4.2];
   function erf(x){ var s=x<0?-1:1; x=Math.abs(x); var t=1/(1+0.3275911*x);
     var y=1-((((1.061405429*t-1.453152027)*t+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x); return s*y; }
   function Phi(z){ return 0.5*(1+erf(z/Math.SQRT2)); }
@@ -552,12 +552,12 @@
     txt(svg,zx(0),PT+4,'z = 0  (x̄ = 216)',{c:C.teal,b:1});
     if(o.crit){
       [-ZC,ZC].forEach(function(v){ svg.appendChild(el('line',{x1:zx(v),y1:PT+20,x2:zx(v),y2:ax,stroke:C.red,'stroke-width':1.5})); });
-      txt(svg,zx(-ZC),ax+36,'−1.96',{c:C.red,b:1}); txt(svg,zx(ZC),ax+36,'+1.96',{c:C.red,b:1});
-      txt(svg,zx(-3),ax-30,'2.5%',{c:C.red,b:1}); txt(svg,zx(3),ax-30,'2.5%',{c:C.red,b:1});
-      if(!o.noMid) txt(svg,zx(0),ax-50,'middle 95%',{c:C.green,b:1});
+      txt(svg,zx(-ZC),ax+36,'−1.645',{c:C.red,b:1}); txt(svg,zx(ZC),ax+36,'+1.645',{c:C.red,b:1});
+      txt(svg,zx(-3),ax-30,'5%',{c:C.red,b:1}); txt(svg,zx(3),ax-30,'5%',{c:C.red,b:1});
+      if(!o.noMid) txt(svg,zx(0),ax-50,'middle 90%',{c:C.green,b:1});
     }
     if(o.dashCrit){ [-ZC,ZC].forEach(function(v){ svg.appendChild(el('line',{x1:zx(v),y1:PT+24,x2:zx(v),y2:ax,stroke:C.ink,'stroke-width':1.3,'stroke-dasharray':'4 3'})); });
-      txt(svg,zx(-ZC),ax+36,'−1.96',{c:C.ink}); txt(svg,zx(ZC),ax+36,'+1.96',{c:C.ink}); }
+      txt(svg,zx(-ZC),ax+36,'−1.645',{c:C.ink}); txt(svg,zx(ZC),ax+36,'+1.645',{c:C.ink}); }
     if(o.mark!==undefined){ var mz=Math.max(-4.1,Math.min(4.1,o.mark));
       svg.appendChild(el('line',{x1:zx(mz),y1:PT+46,x2:zx(mz),y2:ax,stroke:C.ind,'stroke-width':3}));
       svg.appendChild(el('circle',{cx:zx(mz),cy:ax,r:6,fill:C.ind,stroke:'#fff','stroke-width':2}));
@@ -588,25 +588,25 @@
   });
   /* p-value vs alpha scale */
   (function(){
-    var svg=document.getElementById('zp7'), L=40, R=600, y=55, mx=0.10;
+    var svg=document.getElementById('zp7'), L=40, R=600, y=55, mx=0.20;
     function px(v){ return L+v/mx*(R-L); }
     svg.appendChild(el('line',{x1:L,y1:y,x2:R,y2:y,stroke:'#b9c2d8','stroke-width':6,'stroke-linecap':'round'}));
     svg.appendChild(el('line',{x1:L,y1:y,x2:px(ALPHA),y2:y,stroke:C.red,'stroke-width':6,opacity:.5}));
-    [0,0.02,0.04,0.06,0.08,0.10].forEach(function(t){ txt(svg,px(t),y+26,t===0?'0':t.toFixed(2).replace(/^0/,'')); });
+    [0,0.04,0.08,0.12,0.16,0.20].forEach(function(t){ txt(svg,px(t),y+26,t===0?'0':t.toFixed(2).replace(/^0/,'')); });
     svg.appendChild(el('line',{x1:px(ALPHA),y1:y-22,x2:px(ALPHA),y2:y+10,stroke:C.ink,'stroke-width':2,'stroke-dasharray':'4 3'}));
-    txt(svg,px(ALPHA),y-28,'α = .05',{c:C.ink,b:1});
+    txt(svg,px(ALPHA),y-28,'α = .10',{c:C.ink,b:1});
     var pv=pval(ZCALC);
     svg.appendChild(el('circle',{cx:px(pv),cy:y,r:8,fill:C.ind,stroke:'#fff','stroke-width':2}));
     txt(svg,px(pv),y-16,'p = .0314',{c:C.ind,b:1});
-    txt(svg,px(0.025),y+44,'p < α → reject H₀',{c:C.red,b:1}); txt(svg,px(0.078),y+44,'p ≥ α → fail to reject',{c:C.green,b:1});
+    txt(svg,px(0.05),y+44,'p < α → reject H₀',{c:C.red,b:1}); txt(svg,px(0.155),y+44,'p ≥ α → fail to reject',{c:C.green,b:1});
   })();
   function drawCV9(){
     var x=parseFloat(document.getElementById('cvs').value), z=(x-MU)/SE, out=Math.abs(z)>ZC;
     document.getElementById('cvsv').textContent=x.toFixed(4); document.getElementById('cvz').textContent=z.toFixed(3);
     zcurve(document.getElementById('zc9'),{crit:true,mark:z,markLabel:'z_calc = '+z.toFixed(3)});
     var v=document.getElementById('cv9'); v.className='box '+(out?'red':'green');
-    v.innerHTML=out?'<span class="verdict rej">Reject H₀.</span> |z<sub>calc</sub>| = '+Math.abs(z).toFixed(3)+' is beyond 1.96: x̄ is in a rejection region.'
-                   :'<span class="verdict keep">Fail to reject H₀.</span> z<sub>calc</sub> = '+z.toFixed(3)+' is between −1.96 and +1.96. No strong evidence of drift.';
+    v.innerHTML=out?'<span class="verdict rej">Reject H₀.</span> |z<sub>calc</sub>| = '+Math.abs(z).toFixed(3)+' is beyond 1.645: x̄ is in a rejection region.'
+                   :'<span class="verdict keep">Fail to reject H₀.</span> z<sub>calc</sub> = '+z.toFixed(3)+' is between −1.645 and +1.645. No strong evidence of drift.';
   }
   document.getElementById('cvs').addEventListener('input',drawCV9);
   function drawPV8(){
@@ -615,8 +615,8 @@
     document.getElementById('pvp').textContent=p.toFixed(4).replace(/^0/,'');
     zcurve(document.getElementById('zp8'),{p:z,dashCrit:true,mark:z,markLabel:'z_calc = '+z.toFixed(3)});
     var v=document.getElementById('pv8'); v.className='box '+(rej?'red':'green');
-    v.innerHTML=rej?'<span class="verdict rej">Reject H₀.</span> p-value = '+p.toFixed(4).replace(/^0/,'')+' &lt; α = .05.'
-                   :'<span class="verdict keep">Fail to reject H₀.</span> p-value = '+p.toFixed(4).replace(/^0/,'')+' ≥ α = .05. No strong evidence of drift.';
+    v.innerHTML=rej?'<span class="verdict rej">Reject H₀.</span> p-value = '+p.toFixed(4).replace(/^0/,'')+' &lt; α = .10.'
+                   :'<span class="verdict keep">Fail to reject H₀.</span> p-value = '+p.toFixed(4).replace(/^0/,'')+' ≥ α = .10. No strong evidence of drift.';
   }
   document.getElementById('pvs').addEventListener('input',drawPV8);
 
@@ -630,13 +630,13 @@
   function draw4(){
     var s=document.getElementById('c4'); clear(s); curve(s);
     CANDS.forEach(function(x){ if(guesses[x]===undefined) return;
-      var z=Math.abs(x-MU)/SE, ok=z<1.96; marker(s,x,x.toFixed(3),ok?C.green:C.red,AX,PT+40); });
+      var z=Math.abs(x-MU)/SE, ok=z<Z; marker(s,x,x.toFixed(3),ok?C.green:C.red,AX,PT+40); });
     sims.forEach(function(v,i){ s.appendChild(el('circle',{cx:sx(v),cy:AX-6-(i%9)*5,r:3.2,
       fill:(v<LO||v>HI)?C.red:C.ind,opacity:.75})); });
   }
   var box=document.getElementById('cands');
   CANDS.forEach(function(x){
-    var z=(x-MU)/SE, likely=Math.abs(z)<1.96;
+    var z=(x-MU)/SE, likely=Math.abs(z)<Z;
     var d=document.createElement('div'); d.className='cand';
     d.innerHTML='<div class="x">x̄ = '+x.toFixed(3)+'</div><div class="row"><button class="btn ghost sm" data-g="1">Likely</button><button class="btn ghost sm" data-g="0">Unlikely</button></div>'+
       '<div class="fb"></div>';
@@ -659,7 +659,7 @@
     for(var i=0;i<100;i++) sims.push(MU+SE*randn());
     var out=sims.filter(function(v){return v<LO||v>HI;}).length;
     document.getElementById('simStats').innerHTML='<div class="stat">Samples drawn: <b>'+sims.length+'</b></div>'+
-      '<div class="stat">Within ±0.0064 of 216: <b>'+(sims.length-out)+'</b></div>'+
+      '<div class="stat">Within ±0.0054 of 216: <b>'+(sims.length-out)+'</b></div>'+
       '<div class="stat">Far out in a tail: <b style="color:#c0392b">'+out+'</b> ('+(out/sims.length*100).toFixed(1)+'%)</div>';
     document.getElementById('simMsg').style.display='block';
     draw4();
@@ -693,7 +693,7 @@
     marker(svg,x,'x̄ = '+x.toFixed(4),C.ind,ax,PT+46);
     txt(svg,PL+2,ax-60,'H₀ zone: 216 ± ME',{a:'start',c:C.green,b:1});
     var y=212, a=x-ME, b=x+ME, inside=(MU>=a&&MU<=b);
-    bracket(svg,a,b,y,C.ind,'95% CI: x̄ ± ME = ['+a.toFixed(4)+', '+b.toFixed(4)+']');
+    bracket(svg,a,b,y,C.ind,'90% CI: x̄ ± ME = ['+a.toFixed(4)+', '+b.toFixed(4)+']');
     svg.appendChild(el('line',{x1:sx(MU),y1:ax+24,x2:sx(MU),y2:y+16,stroke:inside?C.green:C.red,'stroke-width':2,'stroke-dasharray':'4 3'}));
     txt(svg,sx(MU),y+30,inside?'216 inside the CI':'216 outside the CI',{c:inside?C.green:C.red,b:1});
     return out;
